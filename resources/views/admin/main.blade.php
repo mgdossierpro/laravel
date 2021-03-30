@@ -1,16 +1,11 @@
 
 @extends('layouts.admin')
-
 @section ('content')
-@if (count($errors->all()))
-
-<ul>
-    @foreach ($errors->all() as $error )
-    <li>
-        {{ $error }}
-    </li>
-    @endforeach
-</ul>
+@include('partials.errorsforms')
+@if(Session::has('info'))
+    <div class="alert alert-primary" role="alert">
+    {{ Session::get('info') }}
+    </div>
 @endif
 
 <a href="{{ route('admin.updateordelete') }}"  type="button" class="btn btn-success">Modifier/supprimer un cd</a>
