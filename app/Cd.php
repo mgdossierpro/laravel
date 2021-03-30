@@ -2,6 +2,10 @@
 
 namespace App;
 
+use GuzzleHttp\Promise\Create;
+use Illuminate\Http\Request;
+use Illuminate\Session\Store;
+
 Class Cd{
 
     /*
@@ -13,6 +17,15 @@ Class Cd{
         }
         return $session->get('cds');
     }
+
+    /*
+       Retourne le detail sur un cd 
+    */
+    public function getCd(Store $session, $id){
+ 
+      return view('cds.cddetails');
+    }
+
     /*
         Cree des datas si la session n'en a pas
     */
@@ -26,4 +39,21 @@ Class Cd{
         $session->put('cds', $cds);
     }
 
+
+
+    /*
+        Modfier un cd
+    */
+    private function updateCd($session, $id, $title, $description)
+    {
+       
+    }
+
+    /*
+        Supprimer un cd
+    */
+    private function deleteCd($session, $id, $title, $description)
+    {
+     
+    }
 }

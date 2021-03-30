@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cd;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 
 class CdsController extends Controller
 {

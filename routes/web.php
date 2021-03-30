@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +27,10 @@ Route::get('/', function () {
 /*
 list of cds route
 */
-Route::get('/cds', 'CdsController@getIndex' )->name('cds.cds');
+Route::get('/cds', [
+     'uses'=>'App\Http\Controllers\CdsController@getIndex',
+    'as'=> 'cds.cds']);
+//Route::get('/cds', 'CdsController@getIndex' )->name('cds.cds');
 
 /*
 cd in blog with specific id route
@@ -38,7 +38,6 @@ cd in blog with specific id route
 Route::get('/cd/{id}', function () {
     return view('cds.cddetails');
 })->name('cds.cddetails');
-
 
 /*
 about page
@@ -48,72 +47,57 @@ Route::get('/cdsabout', function () {
 })->name('cds.about');
 
 
-
 /*
 *********************admin space auth********************
 */
 
 Route::group(['prefix' => 'admin'], function () {
 
-    Route::get('', function () {
-        return view('admin.auth');
-    })->name('admin.auth');
+    /*
+    Admin auth
+    */
+    Route::get('', [
+        'uses'=>'App\Http\Controllers\AdminController@authentication',
+        'as'=> 'admin.auth']
+    );
 
     /*
-    admin main
+    Admin main
     */
-    Route::get('main', function () {
-        return view('admin.main');
-    })->name('admin.main');
+    Route::get('main',[ 
+        'uses'=> 'App\Http\Controllers\AdminController@main',
+        'as'=> 'admin.main']);
 
     /*
-    admin create
+    Admin updateordelete
     */
-   // Route::get('create', function () {
-   //     return view('admin.create');
-   // })->name('admin.create');
+    Route::get('updateordelete', [
+        'uses'=> "App\Http\Controllers\AdminController@updateOrDelete",
+        'as'=>'admin.updateordelete']);
 
     /*
-    admin updateordelete
+    Admin update
     */
-    Route::get('updateordelete', function () {
-        $collection = ['id'=> 1,'name' => 'le son de la rue', 'description'=>'le meilleur cd du monde, en 2020'];
-        return view('admin.updateordelete', ['item' => $collection]);
-    })->name('admin.updateordelete');
-
+    Route::get('update/{id}', [
+        'uses'=> "App\Http\Controllers\AdminController@update",
+        'as'=>'admin.update'
+        ]);
 
     /*
-    admin update
+    Admin delete
     */
-    Route::get('update/{id}', function () {
-        return view('admin.update');
-    })->name('admin.update');
-
-    /*
-    admin delete
-    */
-    Route::get('delete/{id}', function () {
-        return view('admin.delete');
-    })->name('admin.delete');
-
+    Route::get('delete/{id}', [
+        'uses'=> "App\Http\Controllers\AdminController@delete",
+        'as'=>'admin.delete'
+        ]);
 
     /*
     Test de route avec un post
     */
-    Route::post('create', function (Illuminate\Http\Request $request, Illuminate\Validation\Factory $validator) {
-        $validation = $validator->make($request->all(), [
-        'title'=>'required|min:5',
-        'description'=>'required|min:3'
+    Route::post('create', [
+        'uses'=> "App\Http\Controllers\AdminController@create",
+        'as'=>'admin.create'
         ]);
-        if ($validation->fails())
-        {
-            return redirect()->back()->withErrors($validation);
-        }
-       // return Response::json(['status'=>'it works']);
-       return redirect()
-       ->route('admin.main')
-       ->with('info','nouvelle entrée enregistrée') . $request->input('title');
-    })->name('admin.create');
 });
 
 
