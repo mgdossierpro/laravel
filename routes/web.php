@@ -28,14 +28,12 @@ Route::get('/', function () {
 })->name('welcome');
 
 /*
-cd in blog with specific id route
+list of cds route
 */
-Route::get('/cds', function () {
-    return view('cds.cds');
-})->name('cds.cds');
+Route::get('/cds', 'CdsController@getIndex' )->name('cds.cds');
 
 /*
-list of cds route
+cd in blog with specific id route
 */
 Route::get('/cd/{id}', function () {
     return view('cds.cddetails');
