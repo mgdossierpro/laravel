@@ -95,7 +95,7 @@ Route::group(['prefix' => 'admin'], function () {
     Test de route avec un post
     */
     Route::post('create', [
-        'uses'=> "App\Http\Controllers\AdminController@create",
+        'uses'=> "App\Http\Controllers\AdminController@add",
         'as'=>'admin.create'
         ]);
 });

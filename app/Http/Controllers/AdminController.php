@@ -16,6 +16,7 @@ class AdminController extends Controller
     {
         return view('admin.auth'); 
     }
+    
     /**
      *  main menu admin
      */
@@ -24,19 +25,20 @@ class AdminController extends Controller
         return view('admin.main'); 
     }
 
-    /*
-        Create admin 
-    */
-    private function create(Request $request, Store $session )
+    /**
+     * Create admin 
+     */
+    public function add(Request $request, Store $session )
     {
-          $this->validate($request, [
+        // redirection auto si pb dans la saisie
+         $validation =  $this->validate($request, [
             'title'=>'required|min:5',
             'description'=>'required|min:3'
             ]);
-      
+
            return redirect()
            ->route('admin.main')
-           ->with('info','nouvelle entrée enregistrée') . $request->input('title');
+           ->with('info','nouvelle entrée enregistrée: ' . $request->input('title'));
     }
 
     /**
@@ -46,6 +48,7 @@ class AdminController extends Controller
     {
         return view('admin.update'); 
     }
+
      /**
      *  delete admin
      */
@@ -53,6 +56,7 @@ class AdminController extends Controller
     {
         return view('admin.delete'); 
     }
+
     /**
      *  updateordelete admin
      */
