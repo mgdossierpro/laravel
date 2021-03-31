@@ -22,8 +22,8 @@ Class Tag extends Model {
     * get all titles for a cd
     * @return array Title
     */
-    public function titles()
+    public function cds()
     {
-        return $this->belongsToMany('App\Models\Cd');
+        return $this->belongsToMany('App\Models\Cd', 'cd_tag', 'tag_id','cd_id');
     }
 }

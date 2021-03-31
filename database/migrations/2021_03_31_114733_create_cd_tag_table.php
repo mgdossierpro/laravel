@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCdsTable extends Migration
+class CreateCdTagTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateCdsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cds', function (Blueprint $table) {
-            $table->increments('id')->uniqid();
-            $table->string('title');
-            $table->string('description');
+        Schema::create('cd_tag', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('tag_id');
+            $table->integer('cd_id');
         });
     }
 
@@ -27,6 +27,6 @@ class CreateCdsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cds');
+        Schema::dropIfExists('cd_tag');
     }
 }

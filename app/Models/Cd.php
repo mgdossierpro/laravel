@@ -22,7 +22,6 @@ Class Cd extends Model {
 
     /**
     * get all titles for a cd
-    * @return array Title
     */
     public function titles()
     {
@@ -31,11 +30,11 @@ Class Cd extends Model {
 
     /**
     * get all tags for a cd
-    * @return array Tag
     */
     public function tags()
     {
-        return $this->hasMany('App\Models\Tags');
+        
+        return $this->belongsToMany('App\Models\Tag','cd_tag', 'tag_id','cd_id');
     }
 
 
@@ -53,8 +52,8 @@ Class Cd extends Model {
     * @return Cd
     */
     public function getCd($id){
-
-      return Cd::find($id);
+        // exemple eager loading ( chargement des sub ressources)
+      return Cd::where('id',$id)->with('titles')->first();
     }
 
     /**
@@ -91,6 +90,7 @@ Class Cd extends Model {
     public function deleteCd($id)
     {
         $cd = Cd::find($id);
+        $cd->titles()->delete();
         $deleted = $cd->delete();
         return $deleted;
     }
