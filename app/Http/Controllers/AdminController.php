@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Cd;
-
+use App\Models\Cd;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
 
 class AdminController extends Controller
 {
@@ -14,55 +12,73 @@ class AdminController extends Controller
      */
     public function authentication()
     {
-        return view('admin.auth'); 
+        return view('admin.auth');
     }
-    
+
     /**
      *  main menu admin
      */
     public function main()
     {
-        return view('admin.main'); 
+        return view('admin.main');
     }
 
     /**
-     * Create admin 
+     * Create admin
      */
-    public function add(Request $request, Store $session )
+    public function add(Request $request)
     {
         // redirection auto si pb dans la saisie
-         $validation =  $this->validate($request, [
-            'title'=>'required|min:5',
-            'description'=>'required|min:3'
-            ]);
+        $validation =  $this->validate($request, [
+        'title'=>'required|min:5',
+        'description'=>'required|min:3'
+        ]);
 
-           return redirect()
-           ->route('admin.main')
-           ->with('info','nouvelle entrée enregistrée: ' . $request->input('title'));
+        dump('ice');
+
+        if($validation)
+        {
+            $cd = new Cd();
+            $cd->title($request->input('title'));
+            $cd->description($request->input('description'));
+            $returnedId = $cd->create($cd);
+
+            return view('admin.main')->with('info', $returnedId .' was created');
+        }
     }
 
     /**
      *  update admin
      */
-    public function update()
+    public function updateCd(Request $request)
     {
-        return view('admin.update'); 
+        //get from db first
+        $cd = Cd::find($request->input('id'));
+        // set new attributes
+        $cd->title($request->input('title'));
+        $cd->title($request->input('description'));
+        $cd->save();
+
+        return view('admin.update')->with('info', 'info updated');
     }
 
      /**
      *  delete admin
      */
-    public function delete()
+    public function delete($id)
     {
-        return view('admin.delete'); 
+        $cd = Cd::find($id);
+        $cd->delete();
+        return view('admin.delete')->with('info', 'cd deleted');
     }
 
     /**
      *  updateordelete admin
      */
-    public function updateOrDelete(Store $session)
+    public function updateOrDelete()
     {
-        $cds = $session->get('cds');
-        return view('admin.updateordelete', ['cds'=> $cds]); 
+        $cd = new Cd();
+        $cds = $cd->getCds();
+        return view('admin.updateordelete', ['cds'=> $cds]);
     }
 }

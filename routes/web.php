@@ -35,9 +35,9 @@ Route::get('/cds', [
 /*
 cd in blog with specific id route
 */
-Route::get('/cd/{id}', function () {
-    return view('cds.cddetails');
-})->name('cds.cddetails');
+Route::get('/cd/{id}', [
+    'uses'=>'App\Http\Controllers\CdsController@getDetails',
+    'as'=> 'cds.cddetails']);
 
 /*
 about page
@@ -64,7 +64,7 @@ Route::group(['prefix' => 'admin'], function () {
     /*
     Admin main
     */
-    Route::get('main',[ 
+    Route::get('main',[
         'uses'=> 'App\Http\Controllers\AdminController@main',
         'as'=> 'admin.main']);
 
