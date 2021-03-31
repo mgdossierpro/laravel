@@ -33,7 +33,7 @@ Class Cd extends Model {
     */
     public function tags()
     {
-        
+
         return $this->belongsToMany('App\Models\Tag','cd_tag', 'tag_id','cd_id');
     }
 
@@ -91,6 +91,7 @@ Class Cd extends Model {
     {
         $cd = Cd::find($id);
         $cd->titles()->delete();
+        $cd->tags()->detach();
         $deleted = $cd->delete();
         return $deleted;
     }
