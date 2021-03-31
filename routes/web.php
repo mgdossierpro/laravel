@@ -18,16 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 /*
-Main route
-*/
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-
-/*
 list of cds route
 */
-Route::get('/cds', [
+Route::get('/', [
      'uses'=>'App\Http\Controllers\CdsController@getIndex',
     'as'=> 'cds.cds']);
 //Route::get('/cds', 'CdsController@getIndex' )->name('cds.cds');
@@ -76,10 +69,18 @@ Route::group(['prefix' => 'admin'], function () {
         'as'=>'admin.updateordelete']);
 
     /*
-    Admin update
+    Admin update form
     */
     Route::get('update/{id}', [
-        'uses'=> "App\Http\Controllers\AdminController@update",
+        'uses'=> "App\Http\Controllers\AdminController@updateForm",
+        'as'=>'admin.updateform'
+        ]);
+
+    /*
+    Admin update
+    */
+    Route::post('update', [
+        'uses'=> "App\Http\Controllers\AdminController@updateCd",
         'as'=>'admin.update'
         ]);
 

@@ -2,29 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Title extends Model
-{
-    use HasFactory;
+Class Tag extends Model {
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'id',
-        'name',
-        'duration',
+        'name'
     ];
-
 
     public $timestamps = false;
 
-    public function Cd()
+    /**
+    * get all titles for a cd
+    * @return array Title
+    */
+    public function titles()
     {
-        return $this->belongsTo('App\Models\Cd', 'cd_id');
+        return $this->belongsToMany('App\Models\Cd');
     }
 }

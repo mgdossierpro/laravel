@@ -34,17 +34,31 @@ class AdminController extends Controller
         'description'=>'required|min:3'
         ]);
 
-        dump('ice');
-
         if($validation)
         {
             $cd = new Cd();
-            $cd->title($request->input('title'));
-            $cd->description($request->input('description'));
-            $returnedId = $cd->create($cd);
+            $cd->title =$request->input('title');
+            $cd->description= $request->input('description');
+            $saved = $cd->create($cd);
+            if($saved)
+            {
+                return redirect()->back()->with('info',$request->input('title') .' was created');
+            }
 
-            return view('admin.main')->with('info', $returnedId .' was created');
+            return redirect()->back()->with('info', $request->input('title') .' was not created there is porblem');
         }
+    }
+
+    /**
+     *  updateform admin
+     */
+    public function updateForm($id)
+    {
+        //get from db first
+        $cdModel = new Cd();
+        $cd = $cdModel->getCd($id);
+
+        return view('admin.main' ,['cd'=>$cd , 'update'=>true]);
     }
 
     /**
@@ -52,14 +66,10 @@ class AdminController extends Controller
      */
     public function updateCd(Request $request)
     {
-        //get from db first
-        $cd = Cd::find($request->input('id'));
-        // set new attributes
-        $cd->title($request->input('title'));
-        $cd->title($request->input('description'));
-        $cd->save();
+        $cdModel = new Cd();
+        $cdModel->updateCd($request->input('id'),$request->input('title'),$request->input('description'));
 
-        return view('admin.update')->with('info', 'info updated');
+        return redirect()->back()->with('info', 'info updated');
     }
 
      /**
@@ -67,9 +77,9 @@ class AdminController extends Controller
      */
     public function delete($id)
     {
-        $cd = Cd::find($id);
-        $cd->delete();
-        return view('admin.delete')->with('info', 'cd deleted');
+        $cd = new Cd();
+        $deleted = $cd->deleteCd($id);
+        return redirect()->back()->with('info', 'entry number :' .$id.' was deleted');
     }
 
     /**

@@ -6,8 +6,8 @@
             <li>
                 <p>{{ $cd['title'] }}</p>
                 <p> Description :  {{ $cd['description'] }}</p>
-                <a href="{{ route('admin.update' , ['id' => $cd['id'] ]) }}"> <img src="/open-iconic/svg/loop-circular.svg"> Update {{ $cd['title'] }}</a>
-                <a href="{{ route('admin.delete' , ['id' => $cd['id'] ]) }}"> <img src="/open-iconic/svg/circle-x.svg"> Delete {{ $cd['title'] }}</a>
+                <a href="{{ route('admin.updateform' , ['id' => $cd['id'] ]) }}"> <i class="bi bi-arrow-clockwise"></i>Update {{ $cd['title'] }}</a>
+                <a href="{{ route('admin.delete' , ['id' => $cd['id'] ]) }}"> <i class="bi bi-trash"></i>Delete {{ $cd['title'] }}</a>
             </li>
         </ul>
     @endforeach
