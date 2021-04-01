@@ -65,7 +65,7 @@ Class Cd extends Model {
      * NOTE : u can use ->get Or paginate
     */
     public function getCds(){
-        return Cd::orderBy('title','asc')->paginate(1);
+        return Cd::orderBy('title','asc')->paginate(5);
     }
 
     /**

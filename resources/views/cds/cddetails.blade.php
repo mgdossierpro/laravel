@@ -3,7 +3,7 @@
 
   @section ('content')
 
-  @include('partials.header')
+  @include('partials.navbaruser')
 
     <p>{{ $cd->title }}</p>
     @foreach ( $cd->titles as $titledetail )

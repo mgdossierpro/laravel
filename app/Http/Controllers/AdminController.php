@@ -12,7 +12,7 @@ class AdminController extends Controller
      */
     public function authentication()
     {
-        return view('admin.auth');
+        return view('admin.login');
     }
 
     /**

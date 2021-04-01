@@ -1,8 +1,8 @@
 @extends('layouts.master')
 @section ('content')
-  @include('partials.header')
+  @include('partials.navbaruser')
   <div class="row">
-    <p>CDS DISPONIBLES</p>
+    <h2 class="mx-auto" >CDS DISPONIBLES</h2>
     @foreach ( $cds as $cd )
         <ul>
             <li>
@@ -13,9 +13,10 @@
         </ul>
     @endforeach
   </div>
-  <div class="row" style="max-height: 50px">
+  <span >
      {{ $cds->links() }}
-  </div>
+  </span>
+
   @include('partials.footer')
 @endsection
 

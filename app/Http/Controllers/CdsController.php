@@ -14,7 +14,6 @@ class CdsController extends Controller
     {
         $cd = new Cd();
         $cds = $cd->getCds();
-      //  $cds =  Cd::orderBy('title','asc')->paginate(2);
         return view('cds.cds', ['cds'=>$cds]);
     }
 
