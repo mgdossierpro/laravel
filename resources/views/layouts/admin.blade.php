@@ -17,10 +17,10 @@
         <link rel="stylesheet" href="{{ URL::to('css/styles.css') }}">
 
     </head>
-    <body class="antialiased">
+    <body class="antialiased p-1">
         <h1>Bienvenue sur l'espace admin </h1>
         @include('partials.navbaradmin')
-        <div>
+        <div class="p-3">
             @yield('content')
         </div>
     </body>

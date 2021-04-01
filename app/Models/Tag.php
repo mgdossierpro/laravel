@@ -16,6 +16,18 @@ Class Tag extends Model {
         'name'
     ];
 
+    // getters and setters
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] =strtolower($value);
+    }
+
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
     public $timestamps = false;
 
     /**

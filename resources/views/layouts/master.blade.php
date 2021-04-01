@@ -17,8 +17,8 @@
         <link rel="stylesheet" href="{{ URL::to('css/styles.css') }}">
 
     </head>
-    <body class="antialiased">
-        <div>
+    <body class="antialiased p-1">
+        <div class="p-3">
             @yield('content')
         </div>
     </body>

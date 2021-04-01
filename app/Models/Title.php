@@ -20,6 +20,27 @@ class Title extends Model
         'duration',
     ];
 
+    // getters and setters
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] =strtolower($value);
+    }
+
+    protected function setDurationAttribute($value)
+    {
+        $this->attributes['duration'] =strtolower($value);
+    }
+
+    public function getNameAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
+    public function getDurationAttribute($value)
+    {
+        return strtoupper($value);
+    }
 
     public $timestamps = false;
 

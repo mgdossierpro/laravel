@@ -13,92 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*
-********************* only reader space  no auth********************
-*/
-
-/*
-list of cds route
-*/
-Route::get('/', [
-     'uses'=>'App\Http\Controllers\CdsController@getIndex',
-    'as'=> 'cds.cds']);
-//Route::get('/cds', 'CdsController@getIndex' )->name('cds.cds');
-
-/*
-cd in blog with specific id route
-*/
-Route::get('/cd/{id}', [
-    'uses'=>'App\Http\Controllers\CdsController@getDetails',
-    'as'=> 'cds.cddetails']);
-
-/*
-about page
-*/
-Route::get('/cdsabout', function () {
-    return view('cds.cdsabout');
-})->name('cds.about');
-
-
-/*
-*********************admin space auth********************
-*/
-
-Route::group(['prefix' => 'admin'], function () {
-
-    /*
-    Admin auth
-    */
-    Route::get('', [
-        'uses'=>'App\Http\Controllers\AdminController@authentication',
-        'as'=> 'admin.auth']
-    );
-
-    /*
-    Admin main
-    */
-    Route::get('main',[
-        'uses'=> 'App\Http\Controllers\AdminController@main',
-        'as'=> 'admin.main']);
-
-    /*
-    Admin updateordelete
-    */
-    Route::get('updateordelete', [
-        'uses'=> "App\Http\Controllers\AdminController@updateOrDelete",
-        'as'=>'admin.updateordelete']);
-
-    /*
-    Admin update form
-    */
-    Route::get('update/{id}', [
-        'uses'=> "App\Http\Controllers\AdminController@updateForm",
-        'as'=>'admin.updateform'
-        ]);
-
-    /*
-    Admin update
-    */
-    Route::post('update', [
-        'uses'=> "App\Http\Controllers\AdminController@updateCd",
-        'as'=>'admin.update'
-        ]);
-
-    /*
-    Admin delete
-    */
-    Route::get('delete/{id}', [
-        'uses'=> "App\Http\Controllers\AdminController@delete",
-        'as'=>'admin.delete'
-        ]);
-
-    /*
-    Test de route avec un post
-    */
-    Route::post('create', [
-        'uses'=> "App\Http\Controllers\AdminController@add",
-        'as'=>'admin.create'
-        ]);
+Route::get('/', function () {
+    return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
+require __DIR__.'/auth.php';

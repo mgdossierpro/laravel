@@ -14,9 +14,30 @@ Class Cd extends Model {
     protected $fillable = [
         'id',
         'title',
-        'description',
-        'tag_id'
+        'description'
     ];
+
+    // getters and setters
+
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] =strtolower($value);
+    }
+
+    protected function setDescriptionAttribute($value)
+    {
+        $this->attributes['description'] =strtolower($value);
+    }
+
+    public function getTitleAttribute($value)
+    {
+        return strtoupper($value);
+    }
+
+    protected function getDescriptionAttribute($value)
+    {
+        return strtoupper($value);
+    }
 
     public $timestamps = false;
 
@@ -39,15 +60,16 @@ Class Cd extends Model {
 
 
     /**
-    * get all cds
+    * Get all cds
     * @return array Cd
+     * NOTE : u can use ->get Or paginate
     */
     public function getCds(){
-        return Cd::orderBy('title','asc')->get();
+        return Cd::orderBy('title','asc')->paginate(1);
     }
 
     /**
-    **  Retourne un cd
+    * Retourne un cd
     * @param integer $id
     * @return Cd
     */
@@ -83,14 +105,16 @@ Class Cd extends Model {
     }
 
     /**
-    *    Supprimer un cd
+    * Supprimer un cd
     * @param integer $id
     * @return bool $deleted
     */
     public function deleteCd($id)
     {
         $cd = Cd::find($id);
+        // supprimer les titres du cd supprimé
         $cd->titles()->delete();
+        // detache tous les tags du cd supprimé
         $cd->tags()->detach();
         $deleted = $cd->delete();
         return $deleted;
