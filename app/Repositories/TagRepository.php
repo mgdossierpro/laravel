@@ -13,4 +13,10 @@ class TagRepository extends BaseRepository
     }
 
 
+    public function  getByCdId($cdId)
+    {
+        return Tag::with(['cd_id' => $cdId]);
+    }
+
+
 }

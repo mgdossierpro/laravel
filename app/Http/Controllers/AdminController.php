@@ -6,6 +6,8 @@ use App\Repositories\CdRepository;
 use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use Exception;
+use InvalidArgumentException;
+use Throwable;
 
 class AdminController extends Controller
 {
@@ -63,10 +65,14 @@ class AdminController extends Controller
             $cd = $this->cdRepository->newInstance();
             $cd->title =$request->input('title');
             $cd->description= $request->input('description');
-            $entity =  $this->cdRepository->create($cd);
 
-            if($entity )
+            // oncree l'entity
+            $entity = $this->cdRepository->create($cd);
+
+            if($entity)
             {
+                // on rattache les tags
+                $cd->tags()->sync($request->input('tag'));
                 return redirect()->back()->with('info',$request->input('title') .' was created');
             }
 
@@ -83,8 +89,17 @@ class AdminController extends Controller
         $cdRepository = $this->cdRepository;
         $cd = $cdRepository->getById($id);
         $tags = $this->tagRepository->getAll();
+        $tagsForView  = [];
 
-        return view('admin.add' ,['cd'=>$cd, 'tags'=>$tags->all() , 'update'=>true]);
+        foreach ($tags as $tag ) {
+           foreach ($cd->tags->all() as $tagducd) {
+                if ($tag->id ===  $tagducd->id)
+                {
+                    array_push($tagsForView, $tag->id);
+                }
+            }
+        }
+        return view('admin.add' ,['cd'=>$cd, 'tags'=>$tags->all(),'tagsForView'=> $tagsForView , 'update'=>true]);
     }
 
     /**
@@ -92,39 +107,26 @@ class AdminController extends Controller
      */
     public function updateCd(Request $request)
     {
-
         $cd = $this->cdRepository->getById($request->input('id'));
         $cd->title = $request->input('title');
         $cd->description = $request->input('description');
 
-       // try {
-
-        // ou le plus simple $user->roles()->sync([1, 2, 3]);
-        // detach ceux qui ne sont pas selectionnés
-        $cd->tags()->detach();
-
         if( $request->input('tag') != null)
-        {        // attach ceux selectionnés
-            foreach ( $request->input('tag') as $tag)
-            {
-                if(!in_array($tag, $cd->tags->all()))
-                {
-                    $cd->tags()->attach($tag);
-                }
-            }
+        {
+            // attach ceux selectionnés
+            $cd->tags()->sync($request->input('tag'));
         }
 
+        if(empty($request->input('tag')))
+        {
+            $cd->tags()->detach();
+        }
 
-            try {
-                $this->cdRepository->update($cd);
-            } catch (\InvalidArgumentException $e) {
-                throw $e;
-                dd($e);
-            }
-       // } catch (Exception $e) {
-         //  dd($e);
-           //return redirect()->back()->withErrors(['problem', 'There were a problem to update this entity']);
-       // }
+        try {
+            $this->cdRepository->update($cd);
+        } catch (Throwable $e) {
+            return redirect()->back()->withErrors(['problem', $e->getMessage()]);
+        }
         return redirect()->back()->with('info', 'info updated');
     }
 
@@ -133,39 +135,34 @@ class AdminController extends Controller
      */
     public function deleteCd($id)
     {
-       // try {
-        // on recupere les entites attenantes first si ca ne supprime pas faut les rattacher
-        $cd = $this->cdRepository->getById($id);
-        $tags = $cd->tags;
-        $titles =$cd->titles;
-        // on detache et ou delete
-        $cd->tags()->detach();
-        $cd->titles()->delete();
-
-        //dd($cd->tags);
-        dd($cd->id);
-        try {
-            $this->cdRepository->delete($id);
-        } catch (\InvalidArgumentException $e) {
-            throw $e;
-        }finally{
-            // on rattache si ca suppprime pas
-            foreach( $tags as $tag)
-            {
-                $cd->tags()->attach($tag);
+            // on recupere les entites attenantes first si ca ne supprime pas faut les rattacher
+            $cd = $this->cdRepository->getById($id);
+            $tags = $cd->tags;
+            $titles =$cd->titles;
+            // on detache et ou delete
+            $cd->tags()->detach();
+            $cd->titles()->delete();
+            $tags = $this->tagRepository->getByCdId($cd->id);
+            foreach ($tags as $tag) {
+                $tag->cds()->detach();
             }
-            foreach( $titles as $title)
-            {
-                $cd->titles()->save($title);
-            }
-        }
-    /**
-     *     } catch (Exception $e) {
-     *      return redirect()->back()->withErrors(['problem', 'There were a problem to delete this entity']);
-     *   }
-        */
 
-        return redirect()->back()->with('info', 'entry number :' .$id.' was deleted');
+            try {
+                $this->cdRepository->delete($id);
+            } catch (\InvalidArgumentException $e) {
+                // on rattache si ca suppprime pas
+                foreach($tags as $tag)
+                {
+                    $cd->tags()->attach($tag);
+                }
+                foreach( $titles as $title)
+                {
+                    $cd->titles()->save($title);
+                }
+                return redirect()->back()->withErrors(['problem', $e->getMessage()]);
+            }
+
+       return redirect()->back()->with('info', ' cd : ' .$cd->title.' was deleted');
     }
 
     /**

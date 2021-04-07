@@ -15,11 +15,11 @@ class CdTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $cd = new \App\Models\Cd(['title'=>'Album '.$i ,'description'=> ' Annee 200'.$i.' par un groupe appele XXX' ]);
             $cd->save();
 
-            for ($j = 0; $j <= 10; $j++) {
+            for ($j = 1; $j <= 10; $j++) {
                 $title = new \App\Models\Title(['name'=>'titre'.$j.' de l\'album' , 'duration'=> ' durée'.$j , 'cd_id'=> $i]);
                 $cd->titles()->save($title);
                 $title->save();
