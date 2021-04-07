@@ -28,11 +28,9 @@ Route::get('/cdsabout', function () {
 })->name('cds.about');
 
 
-Route::get('/admin', function () {
+Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
-
-
 
 /*
 ********************* test ac les services ********************

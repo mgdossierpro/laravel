@@ -30,6 +30,27 @@ class AdminController extends Controller
         $this->tagRepository = $tagRepository;
     }
 
+
+    /**
+     *  auth admin
+     */
+    public function admin()
+    {
+        $tags = $this->tagRepository->getAll();
+        return view('admin', ['tags'=>$tags]);
+    }
+
+
+    /**
+     *  list cd admin
+     */
+    public function list()
+    {
+        $cds =$this->cdRepository->getAll();
+        return view('list', ['cds'=> $cds]);
+    }
+
+
     /**
      *  auth admin
      */
@@ -97,7 +118,7 @@ class AdminController extends Controller
                 }
             }
         }
-        return view('admin.add' ,['cd'=>$cd, 'tags'=>$tags->all(),'tagsForView'=> $tagsForView , 'update'=>true]);
+        return view('admin' ,['cd'=>$cd, 'tags'=>$tags->all(),'tagsForView'=> $tagsForView , 'update'=>true]);
     }
 
     /**

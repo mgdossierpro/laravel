@@ -70,6 +70,20 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 
 Route::group(['prefix' => 'admin'], function () {
     /*
+    Admin admin
+    */
+    Route::get('admin', [
+        'uses' => 'App\Http\Controllers\AdminController@admin',
+        'as' => 'admin'])->middleware('auth');
+
+    /*
+    Admin admin
+    */
+    Route::get('list', [
+        'uses' => 'App\Http\Controllers\AdminController@list',
+        'as' => 'list'])->middleware('auth');
+        
+    /*
     Admin add
     */
     Route::get('add', [

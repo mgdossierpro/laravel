@@ -13,11 +13,6 @@
     @endif
 
 
-    @if($errors->any())
-    <div class="alert alert-danger" role="alert">
-        <h4>{{$errors->first()}}</h4>
-    </div>
-    @endif
 
     @if(isset($update))
         <form action="{{ route('admin.update') }}" method="post">
