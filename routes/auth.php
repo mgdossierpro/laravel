@@ -82,20 +82,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('list', [
         'uses' => 'App\Http\Controllers\AdminController@list',
         'as' => 'list'])->middleware('auth');
-        
-    /*
-    Admin add
-    */
-    Route::get('add', [
-        'uses' => 'App\Http\Controllers\AdminController@addForm',
-        'as' => 'admin.add'])->middleware('auth');
-
-    /*
-    Admin updateordelete
-    */
-    Route::get('updateordelete', [
-        'uses' => "App\Http\Controllers\AdminController@updateOrDelete",
-        'as' => 'admin.updateordelete'])->middleware('auth');;
 
     /*
     Admin update form
@@ -122,7 +108,7 @@ Route::group(['prefix' => 'admin'], function () {
     ])->middleware('auth');;
 
     /*
-    Test de route avec un post
+    post
     */
     Route::post('create', [
         'uses' => "App\Http\Controllers\AdminController@add",
