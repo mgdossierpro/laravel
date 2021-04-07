@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Repositories\CdRepository;
 use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
-use Exception;
-use InvalidArgumentException;
 use Throwable;
 
 class AdminController extends Controller
@@ -66,7 +64,7 @@ class AdminController extends Controller
             $cd->title =$request->input('title');
             $cd->description= $request->input('description');
 
-            // oncree l'entity
+            // on cree l'entity
             $entity = $this->cdRepository->create($cd);
 
             if($entity)
@@ -135,32 +133,28 @@ class AdminController extends Controller
      */
     public function deleteCd($id)
     {
-            // on recupere les entites attenantes first si ca ne supprime pas faut les rattacher
-            $cd = $this->cdRepository->getById($id);
-            $tags = $cd->tags;
-            $titles =$cd->titles;
-            // on detache et ou delete
-            $cd->tags()->detach();
-            $cd->titles()->delete();
-            $tags = $this->tagRepository->getByCdId($cd->id);
-            foreach ($tags as $tag) {
-                $tag->cds()->detach();
-            }
+        // on recupere les entites attenantes first si ca ne supprime pas faut les rattacher
+        $cd = $this->cdRepository->getById($id);
+        $tags = $cd->tags;
+        $titles =$cd->titles;
+        // on detache et ou delete
+        $cd->tags()->detach();
+        $cd->titles()->delete();
 
-            try {
-                $this->cdRepository->delete($id);
-            } catch (\InvalidArgumentException $e) {
-                // on rattache si ca suppprime pas
-                foreach($tags as $tag)
-                {
-                    $cd->tags()->attach($tag);
-                }
-                foreach( $titles as $title)
-                {
-                    $cd->titles()->save($title);
-                }
-                return redirect()->back()->withErrors(['problem', $e->getMessage()]);
+        try {
+            $this->cdRepository->delete($id);
+        } catch (\InvalidArgumentException $e) {
+            // on rattache si ca suppprime pas
+            foreach($tags as $tag)
+            {
+                $cd->tags()->attach($tag);
             }
+            foreach( $titles as $title)
+            {
+                $cd->titles()->save($title);
+            }
+            return redirect()->back()->withErrors(['problem', $e->getMessage()]);
+        }
 
        return redirect()->back()->with('info', ' cd : ' .$cd->title.' was deleted');
     }
@@ -173,6 +167,4 @@ class AdminController extends Controller
         $cds =$this->cdRepository->getAll();
         return view('admin.updateordelete', ['cds'=> $cds]);
     }
-
-
 }
