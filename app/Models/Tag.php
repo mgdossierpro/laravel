@@ -36,6 +36,6 @@ Class Tag extends Model {
     */
     public function cds()
     {
-        return $this->belongsToMany('App\Models\Cd', 'cd_tag', 'tag_id','cd_id');
+        return $this->belongsToMany('App\Models\Cd');
     }
 }

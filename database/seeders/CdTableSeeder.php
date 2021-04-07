@@ -32,13 +32,13 @@ class CdTableSeeder extends Seeder
         $tag1->save();
         $tag->save();
 
-        $cd =Cd::find(1);
-        $cd->tags()->attach($tag->id);
-
-        $cd =Cd::find(2);
+        $cd =Cd::find(4);
         $cd->tags()->attach($tag->id);
 
         $cd =Cd::find(3);
+        $cd->tags()->attach($tag->id);
+
+        $cd =Cd::find(4);
         $cd->tags()->attach($tag1->id);
 
     }

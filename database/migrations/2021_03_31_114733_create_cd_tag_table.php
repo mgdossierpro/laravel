@@ -15,8 +15,9 @@ class CreateCdTagTable extends Migration
     {
         Schema::create('cd_tag', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('tag_id');
             $table->integer('cd_id');
+            $table->integer('tag_id');
+            $table->unique(['tag_id', 'cd_id']);
         });
     }
 

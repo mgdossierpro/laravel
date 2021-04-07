@@ -54,69 +54,7 @@ Class Cd extends Model {
     */
     public function tags()
     {
-
-        return $this->belongsToMany('App\Models\Tag','cd_tag', 'tag_id','cd_id');
+        return $this->belongsToMany('App\Models\Tag');
     }
 
-
-    /**
-    * Get all cds
-    * @return array Cd
-     * NOTE : u can use ->get Or paginate
-    */
-    public function getCds(){
-        return Cd::orderBy('title','asc')->paginate(5);
-    }
-
-    /**
-    * Retourne un cd
-    * @param integer $id
-    * @return Cd
-    */
-    public function getCd($id){
-        // exemple eager loading ( chargement des sub ressources)
-      return Cd::where('id',$id)->with('titles')->first();
-    }
-
-    /**
-    * Créer un cd
-    * @param Cd
-    * @return bool
-    */
-    public function create(Cd $cd){
-       $saved =  $cd->save();
-       return $saved;
-    }
-
-    /**
-    * Modfier un cd
-    * @param Cd $cd
-    * @return bool $updated
-    */
-    public function updateCd($id,$title,$description)
-    {
-        //get from db first
-        $cd = Cd::find($id);
-        // set new attributes
-        $cd->title = $title;
-        $cd->description = $description;
-        $updated = $cd->save();
-        return $updated;
-    }
-
-    /**
-    * Supprimer un cd
-    * @param integer $id
-    * @return bool $deleted
-    */
-    public function deleteCd($id)
-    {
-        $cd = Cd::find($id);
-        // supprimer les titres du cd supprimé
-        $cd->titles()->delete();
-        // detache tous les tags du cd supprimé
-        $cd->tags()->detach();
-        $deleted = $cd->delete();
-        return $deleted;
-    }
 }

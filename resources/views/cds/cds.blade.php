@@ -8,15 +8,25 @@
             <li>
                 <p>{{ $cd->title }}</p>
                 <p> Description :  {{ $cd->description }}</p>
+
+                @foreach ( $cd->tags as $tag )
+                <ul>
+                    <li>
+                        <p> Tag :{{ $tag->name }}</p>
+
+                    </li>
+                </ul>
+               @endforeach
+
                 <a href="{{ route('cds.cddetails' , ['id' => $cd->id ]) }}"> <i class="bi bi-bookmark-plus"></i> Les Détails de cet album</a>
             </li>
         </ul>
     @endforeach
   </div>
   <span >
-     {{ $cds->links() }}
-  </span>
 
+  </span>
+    {{ $cds->links() }}
   @include('partials.footer')
 @endsection
 

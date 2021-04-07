@@ -33,4 +33,14 @@ Route::get('/admin', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
+
+/*
+********************* test ac les services ********************
+*/
+
+Route::get('/essai', function(App\CacheInterface $cache){
+    dd($cache);
+} );
+
+
 require __DIR__.'/auth.php';
